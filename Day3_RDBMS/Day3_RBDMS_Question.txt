@@ -1,0 +1,31 @@
+1) print the employee name and the number of titles each of them have published
+
+2) print the store name, title name, total price , quantity, price, publisher name for every book
+
+3) print every book name and  its auth's full name
+
+4) print the author's full name and number of books written by each
+
+5) print the author full name, publisher's name, title name, quantity sold, store name and the store address of all the books.
+
+------------------------------------------------------
+6) select author name and the average quantity sold for every author
+select CONCAT(au_fname, ' ', au_lname) Author_name, AVG(qty) Avg_Qty_Sold
+from authors a join titleauthor ta
+on a.au_id = ta.au_id
+join sales s
+on s.title_id = ta.title_id
+group by CONCAT(au_fname, ' ', au_lname)
+
+7) print the store name and address of all the sales for a given title
+
+8) what is the max quantity sold for every publisher?
+
+9) print the employee names for a given publisher
+
+10) Explore the function soundex. show an example query
+
+11) print the total sales(price*quantity) for every city in the author table
+
+12) sort by date and print the store name and the latest purchase done by every store
+

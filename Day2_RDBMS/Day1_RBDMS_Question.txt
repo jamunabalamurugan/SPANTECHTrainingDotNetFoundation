@@ -1,0 +1,11 @@
+1) select all the sale details
+2) select the order number and quantity from the sales table with proper headings
+3) select all the sale data for those title with id BU1032
+4) select the count of sale for every title
+5) select the sum of quantity for every title
+6) select all teh sale data sorted by the order date
+7) select the orders placed between two given dates
+8) select the sale data for the orders for the title published by New Moon Books
+9) select the number of orders for every title pulished by author with first name Johnson
+
+10) select the number of orders for every title pulished by authors fro t he state CA and having price >10

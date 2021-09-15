@@ -1,0 +1,59 @@
+--create a userdetails table with username,password and role and insert few records
+--create a procedure which will take the username and password and return back the role
+-- if the username and password does not match it return back the word 'error'
+
+Create a table salary with salid,basic, hra,da and deduction
+Create a proc to insert values in to the table
+create a function to calculate total salary of employees(scalar)
+formula (basic+hra+da-ded)-10%
+create a table employee with fields eid,name, salid, and leaveCount
+relate the tables(eid - identity)
+create a sp to insert data into the table
+
+create a function that will take the employee id print the salary of teh employee like his name, basic, hra, da, deduction, also calculatete leave deduction
+if the employee has taken 0-2 days leave then no pay cut
+2-5 days leave total salary/30 * number of days leave should be deducted
+more than 5 days leave - half salary
+
+1) create a function that will take the au_id and list every order with the price and quantity(table function)
+
+2) create a function that will take the order number and give the total price(sclar function)
+
+3) create a database dbShowTime
+create tables in the database for the following scenario
+There are 10 screens
+each screen has diff show times
+screen will have number, capacity, status
+All the movie details should be stored
+movie has id,name, duration, details
+customer can book movie in a screen
+seat numer is not required
+
+4) With the above table list all the movies that have the first 3 chars that sound like 'sea'
+5) List all the screens in which a movie is screened
+6) if a movie is deleted then all the screen in which the movie is screened should be updated to null for movie id
+7) write a procedure which will take movie and screen details to be inserted at the same time. If the screen for new movie is occupied already then the movie should not be inserted at all
+8) list the number of screens for every movie
+9) list the average duration of movie in every screen
+10) sort the movies by it duration and list them all.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
