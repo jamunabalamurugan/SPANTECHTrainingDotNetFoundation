@@ -1,14 +1,85 @@
-E F Codd
+Databases
+What is the need?
+Fast access to information is critical
+Manage data efficiently-storing,orgznizing,adding,modifying and deleting data
+
+A database is a collection of data....Important decisions are based on the information available at any point
+A specialized computer programs known as a Database Management System(DBMS)
+A DBMS will store,process and retrieve data
+Eg.Foxbase,Foxpro,MS Access
+
+RDBMS is a collection of related data.
+Eg.
+1. Microsoft SQL Server from Microsoft Corporation
+2. IBM DB2 
+3. Oracle 11i
+4. Sybase SQL Server
+5. Informix Server 
+
+Father of RDBMS- Dr.E F Codd
+Set Theory
+Entity Relationship Model
+
 RDBMS
-  Entity-Table
-  Attribute - Column
+  Entity-Table(An object with distinct set of properties....building block of a database....Eg.Student,Course,Grade....you represent entity in a rectangular box)
+
+  Attribute - Column(A property of an Entity that diffrenetiate it from other entities....it provide information about the entity....Attribute for Student will   Name,Rollno,CourseId)
+  Relationships-Eg.Student---->Studies----->Course
+	One-toOne(1:1) Relationship   Eg.Department----->Headed By------>Faculty
+	Many-to-One(m:1) Relationship Eg.Student(m)----->Register For------>Discipline(1)
+					 Employee(m)----->Belongs to------->Department(1)
+
+	Many-to-Many(m:m) Relationship Eg.Customer(m)---->Purchases------>Product(m)
+
+  Table-A table is a set of rows andd columns	
+	Eg.Department----->Headed By------>Faculty
+Deparment
+	DepartmentId(PK)	DepartmentName(AK)	Location	DepartmentHead
+	PHY			Physics			P-Block		0089
+	MAT			Maths			M-Block		0145
+	CHE			Chemistry		C-Block		0127
+
+Faculty
+	FcaultyMemberCode	FacultyName	DepartmentId(FK)	Birthdate
+	0024			Jim		CHE			4/20/1996
+	0056			Joe		PHY			9/19/1996
+	0089			Jamuna		CSC			25/11/1976
+			
+
+
   Tuple - Row
   Cardinality - No of rows
   Arity/Degree - No of columns
-  Key/Primary key - Unique and not null
-  Composite Key - More than one column combines to be coem the primary key
-  Candidate Key - Eligible to become the primary key
-  Alternate Key - Other Candidate keys after choosing the primary key
+
+Keys
+Keys play an important role in maitaining data integrity
+Eg.Vehicle Table has SerialNo,Regn#,VehicleCOlour,Price,Speed
+
+  Key/Primary key - Unique and not null Eg.SerialNo
+  Composite Key - More than one column combines to be come the primary key.....a single attribute cannot be used to identify rows uniquely and a cocmbination of two of more attributes is used as Primary Key. A combination of CustomerCode and ProductCode results in all unique values
+
+	Purchase Table
+	CustomerCode	PurchaseCode	QtyPurchased	PurchaseDate
+	C122		P022		12		2/15/2020
+	C134		P005		15		2/15/2020
+	C122		P003		9		2/16/2020
+	C134		P003		9		2/16/2020
+	C122		P025		10		2/15/2020
+
+
+  Candidate Key - Eligible to become the primary key Eg.SerialNo,Regn#
+  Alternate Key - Other Candidate keys after choosing the primary key Eg.Regn#
+
+  Foreign Key-When a primaray  key of ne table appears as an attribute of another table its called foreign key....Its used to relate two tables
+
+
+Data Integrity
+
+1.Entity Inegrity-Each row can be uniquely identfied by an attribute called as Primary Key.The primary key cannot have a NULL value.
+2.Domain Integrity-range of valid entries for a given column
+3.Referential Integrity-ensures that for every value of a foreign key, there is a matching value of the primary key
+
+
   Strong Entity
   Weak enity
   Single Value Attr
@@ -17,13 +88,24 @@ RDBMS
   Complex Attr
 
   Normalization
-  1st NF - Primary key
+	Normalizing a logical database design involves organizing the data into more than one table.Normalization improves performance by reducing redundancy.
+
+Redundanacy-Inconsistencies(Errors are more likely to occurs when facts are repeated)
+Rules for achieving a good database design
+a.Each table should have an idetifier
+b.Single type of entity
+c. Nullable columns should be  avaoided
+d.repetition of values to be avoided
+
+  1st NF - Each cell of the table contains precisely one value
+	   Primary key
            No Multivalue Attr
       	   Every Column- Similar type of data
-  2nd NF - Table should be in 1NF
-           No Partial depend
+  2nd NF - Table should be in 1NF and every attribute in the row is functionally dependent on the whole key and not just part of the key
+           No Partial dependency
+	
   3rd NF - Table should be in 2NF
-   	   No Transitive Depend
+   	   No Transitive Dependency
 
 A shop -> One branch
 Shop sells produts
