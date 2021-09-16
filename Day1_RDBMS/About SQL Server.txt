@@ -8,7 +8,7 @@ Client------------->SQL Server(RDBMS)
       <---------------
        Results
 
-The client is responsible for Business Logic and Preenting data to the user...It typically runs on one or more computers
+The client is responsible for Business Logic and Prsenting data to the user...It typically runs on one or more computers
 
 Server manages the databases and allocates the available server resources such as memory,disk operation,network bandwidth
 

@@ -1,0 +1,30 @@
+Sales Table
+1) Print the Order number, title id and quantity for every order
+2) Print the number of orders on Payment terms "Net 30"
+3) Print the total quantity of order for the title PS2091
+4) Print the average quantity for every store
+5) Print the title id and the total quantity of every title which has more than 2 orders
+6) Print the title of the highest ordered title
+7) Print the order numebr and date of all orders sorted by stor_is in desc order
+8) Print the numebr of titles for every order with the sum of quantity in ascending order of ord_num
+
+9) Select the author name who have published for the publication 'Binnet & Hardley'
+
+10) print the full name  of employees
+
+11) print the 5 highest priced book title
+
+12) print the titles of books which are price min of 5 to max of 20
+
+13) print the publishers details if the publisher name contains 's'
+
+14) select the authors name and sort them in the asending order of last name
+
+15) select employee first name ,last name hire date, joi_id and job description
+
+16) Select the title,royaltyper and author's phone number
+
+17) select the stor_name,ord_num,ord_Date,qty,title,author fullname,publisher's name
+
+
+

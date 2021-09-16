@@ -1,0 +1,60 @@
+Candidate Key
+Primary Key(PK)
+Alternate Key
+Composite Key-A singlr attribute cannot be used to identify rows uniquely....a combination of two or  more attributes is used as a Primary Key
+
+Foreign Key-When A PRIMARY Key of one table appears as an attribute in another table,it is called the Foreign Key in the second table. 
+A foreign Key is used to relate two tables.You must ensure that the values of the FK match with any one value of PK.
+
+Department-Depcode(PK),Name,Location,DepHead(FK)
+	   PHY,Physics,P-Block,0089
+	   MAT,Maths,M-Block,0145
+	   CHE,Chemistry,C-Block,0127
+
+Faculty-FacultyCode(PK),Name,Depcode(FK),Skills,Subject,Experience,DateOfBirth
+	0089,David Shaw,PHY,......
+	0145,Daniel T,MAT,....
+	0127,Tony C,CHE,....
+	0024,Jim,IT,
+
+Data Integrity
+
+Entity,Domain,Referntial
+
+Entity-Primary Key
+Domain-Range of Valid entries for a given column
+Referential-ensures that For every  value of Foreign key,ther is a matching value of the Primary Key
+
+2 NF
+ECode+ProjectCode(Composite Key),Dept,Hours
+
+EmployeeDept Table....1.Ecode,Dept
+Project Table...2.Ecode,ProjectCode,Hours
+
+3NF
+Every attribute in the row is functionally dependent upon the whole key and not just part of the key...
+There should not be any Transitive Dependency
+
+
+it should be in 2NF and every non key attribute is functionally dependent only on the primary key
+EmployeeDept Table....1.Ecode,Dept,DepHead
+
+Employee-Ecode,Dept
+Department-Dept,DepHead
+
+Denormalization
+
+The intentional introduction of redundancy in a table in order to improve the performance is called denormalization
+Eg.Orders
+OrderNo,ProductId,Qty
+
+Products
+ProductId,Desc,Cost
+
+
+Orders
+OrderNo,ProductId,Qty,ProductCost,Tax,OrderCost
+
+
+
+

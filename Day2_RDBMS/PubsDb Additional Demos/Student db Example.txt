@@ -1,0 +1,135 @@
+create database Student5
+
+create table stu_per_det
+(
+Stud_id int not null,
+stud_name varchar(50),
+dob date,
+
+ph_no varchar(10)
+)
+alter table stu_per_det
+add primary key(Stud_id)
+
+select * from stu_per_det
+
+alter table stu_per_det
+add ph_no varchar(10)
+
+alter table stu_per_det
+drop column ph_no 
+
+create table stu_fee_det
+(
+fid int primary key,
+stud_id int foreign key references stu_per_det(Stud_id),
+fees_amt int check(fees_amt>10000),
+paidamt int not null,
+balance int default 100
+)
+
+select * from stu_fee_det
+
+alter table stu_fee_det
+add constraint sid_fk foreign key(stud_id) references stu_per_det(stud_id)
+
+insert into stu_per_det values(1, 'bob' , '09/30/2019' ,21,'9482303950') 
+insert into stu_per_det values(2, 'bobby' ,'3/09/2019',21,'9875639250') 
+insert into stu_per_det values(3, 'amar' ,'12/09/2019',21,'9478459650') 
+
+ 
+insert into stu_fee_det values(2, 'bobby' ,'3/09/2019',21,'9875639250') 
+insert into stu_fee_det values(3, 'amar' ,'12/09/2019',21,'9478459650') 
+
+insert into stu_fee_det(fid,stud_id,fees_amt,paidamt) values (200,1,12000,45)
+
+create database Library1
+
+create table Book(Bid int primary key, Bname varchar(50), BAuth varchar(50), BPubl varchar(50), Bprice int, Noc int)
+
+create table member(mid int primary key, Mname varchar(50), Memail varchar(50), Mph varchar(10), MAdd varchar(20))
+
+create table trans(bid int foreign key references Book(Bid), mid int foreign key references member(mid), iss_date date not null, due_date date not null, fine int)
+
+insert into Book values(1,'Today is Monday', 'GBK', 'NWC', 600, 10)
+insert into Book values(2,'Monday IS Fun', 'GBK', 'WCT', 700, 20)
+insert into Book values(3,'Today is not Holiday', 'GBK', 'NGC', 500, 20)
+
+insert into member values(10,'Gowtham', 'gbk@lnt', '9482471287', 'Bengaluru')
+insert into member values(20,'Chanakya', 'chanakya@lnt', '9152471287', 'Chennai')
+insert into member values(30,'GBK', 'Joker@lnt', '8754821287', 'Hyderabad')
+
+insert into trans values(1, 10, '09/30/2019', '10/15/2019', 2)
+insert into trans values(1, 10, '09/25/2019', '10/12/2019', 10)
+insert into trans(bid,mid,iss_date,due_date) values(1, 30, '09/29/2019', '10/14/2019')
+
+select * from Book
+select * from member
+select * from trans
+
+drop table trans 
+
+alter table trans add constraint ch default 0 for fine
+alter table trans add constraint cg check(due_date>iss_date)
+alter table member add gender char(1)
+
+update member set gender='F' where mid = 10
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////Assignment////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+create database BBank
+
+create table cust_master(cust_num int primary key, fname varchar(20), mid_nam varchar(20) not null, lname varchar(20), cust_city varchar(20), 
+cust_ph varchar(10) default 0000000000, cus_opp varchar(10), cust_DOB date)
+
+create table Brn_master(brn_id int primary key, brn_name varchar(20) not null, brn_city varchar(20))
+
+create table acc_master(acc_num int primary key, cust_num int foreign key references cust_master(cust_num), 
+brn_id int foreign key references Brn_master(brn_id), op_bal int check(op_bal>=0), acc_op_date date check(acc_op_date>getdate()),
+acc_type varchar(10) check(acc_type='savings' OR acc_type='current'), acc_stat varchar(11) check(acc_stat='active' OR acc_stat='terminated'))
+
+create table loan_det(cust_no int foreign key references cust_master(cust_num), bran_id int foreign key references Brn_master(brn_id),
+loan_amt bigint check(loan_amt>50000))
+
+create table trans_det(tran_no int primary key,acc_num int foreign key references acc_master(acc_num), dat_trans date not null,
+med_trans varchar(20), trans_typ varchar(20), trans_amt bigint not null check(trans_amt>0))
+
+select * from trans_det
+select * from cust_master
+select * from Brn_master
+select * from acc_master
+select * from loan_det
+
+insert into cust_master values('1','hari','krishna','ram','blore','9487657932','techie','12/19/1996')
+insert into cust_master values('2','rui','kana','raq','bwre','9487612932','navy','12/20/1996')
+insert into cust_master values('3','tap','anhna','aem','inoe','9487327932','army','11/19/1996')
+insert into cust_master values('4','ri','aea','ram','manre','9487651332','govt','1/1/1996')
+insert into cust_master values('5','nara','manu','rwm','chen','9487237932','busis','1/9/1991')
+
+insert into Brn_master values(2,'DLF','Chennai')
+insert into Brn_master values(1,'porur','Chennai')
+insert into Brn_master values(3,'mana','Chennai')
+insert into Brn_master values(4,'mugul','Chennai')
+insert into Brn_master values(5,'koku','Chennai')
+
+
+insert into acc_master values(101,1,2,1000,'10/01/2019','savings','active')
+insert into acc_master values(102,2,1,1000,'10/01/2019','savings','active')
+insert into acc_master values(103,3,1,1000,'10/01/2019','savings','active')
+insert into acc_master values(104,2,3,1000,'10/01/2019','current','active')
+insert into acc_master values(105,1,3,1000,'10/01/2019','savings','active')
+
+insert into trans_det values(200,101,getdate(),'cheque','online','10000')
+insert into trans_det values(201,102,getdate(),'cash','offline','200000')
+insert into trans_det values(202,102,getdate(),'cheque','offline','5000')
+insert into trans_det values(203,101,getdate(),'cash','offline','1100')
+insert into trans_det values(204,103,getdate(),'cash','offline','18000')
+
+insert into loan_det values(1,2,60000)
+insert into loan_det values(2,5,70000)
+insert into loan_det values(2,4,65000)
+insert into loan_det values(3,1,70000)
+insert into loan_det values(5,1,132000)
+

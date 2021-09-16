@@ -3,7 +3,7 @@ create database dbShop
 use dbShop
 
 create table tblCustomer
-(id char(4),
+(cid char(4),
 name varchar(20),
 phone varchar(15),
 email varchar(50)
@@ -12,22 +12,22 @@ email varchar(50)
 sp_help tblCustomer
 
 alter table tblCustomer
-alter column id char(4) not null
+alter column cid char(4) not null
 
 alter table tblCustomer
-add constraint pk_CID primary key(id)
+add constraint pk_CID primary key(cid)
 
 drop table tblCustomer
 
 create table tblCustomer
-(id char(4) primary key,
+(cid char(4) primary key,
 name varchar(20) not null,
 phone varchar(15) not null,
 email varchar(50) not null
 )
 
 create table tblProduct
-(id int identity(100,1) primary key,
+(pid int identity(100,1) primary key,
 name varchar(50) not null,
 price float not null check(price>=0),
 quantity int not null check(quantity>=0),
@@ -39,21 +39,21 @@ sp_help tblProduct
 create table tblBill
 (BillNo int identity(1,1) primary key,
 Bill_Date date not null,
-Customer_Id char(4) references tblCustomer(id),
+Customer_Id char(4) references tblCustomer(cid),
 total_amount float check(total_amount>0)
 )
 
 sp_help tblBill
 
 create table tblSupplier
-(id char(4) primary key,
+(sid char(4) primary key,
 contact_name varchar(20) not null,
 phone varchar(15))
 
 create table tblSuppliersProduct
 (ship_no int identity(1000,1) primary key,
-product_id int references tblProduct(id),
-supp_id char(4) references tblSupplier(id),
+product_id int references tblProduct(pid),
+supp_id char(4) references tblSupplier(sid),
 Supplier_date date,
 quantity int
 )
@@ -90,8 +90,10 @@ info varchar(20))
 create table tblEmployeeSkill
 (eid char(4) references tblEmployee(id),
 skill_name varchar(20) references tblSkill(name),
-skill_level int default 3,
-primary key(eid,skill_name))
+skill_level int default 9,
+primary key(eid,skill_name))--Composite primary key
+
+
 
 sp_help tblEmployeeSkill
 
@@ -104,11 +106,15 @@ insert into tblSkill values('C++','PLT','Hello')--Wrong Column name or number of
 insert into tblSkill values('C++12345678901234567890','PLT')--Wrong String or binary data would be truncated in table--
 insert into tblSkill(name,info) values('C++','OOPS')
 insert into tblSkill(info,name) values('Web','java')
-insert into tblSkill(name) values('other')
+insert into tblSkill(name) values('CSharp')
+insert tblskill values('HTML','WEB')--Wrong....Column name or number of supplied values dotn match
 
-insert into tblEmployee values('E001','Ramu','1234567890','ABC')
-insert into tblEmployee values('E002','Ramu','9876543210','ABC')--Wrong iolation of UNIQUE KEY constraint '--
-insert into tblEmployee values('E003','Bimu','9876543210','ABC')
+insert tblEmployee values('E001','Kavin','1234567890','ABC')
+insert tblEmployee values('E002','Kanav','9876543210','ABC')--Wrong violation of UNIQUE KEY constraint '--
+insert tblEmployee values('E003','Sumedha','9444032689','ABC')
+
+insert hrdb.dbo.tblEmployeeInfo(employeeid,name,location,depid)
+values(1002,'Arvind','Bangalore',100)
 
 select * from tblEmployee
 
@@ -120,43 +126,59 @@ insert into tblEmployeeSkill values('E003','C++',7)
 --Error coz E002 is not present in parent--
 insert into tblEmployeeSkill values('E002','Java',7)--Wrong The INSERT statement conflicted with the FOREIGN KEY constraint--
 insert into tblEmployeeSkill values('E003','Java',default)
-insert into tblEmployeeSkill(eid,skill_name) values('E001','Java')
+insert into tblEmployeeSkill(eid,skill_name) values('E003','C')--It accepted the skill_level with default
+insert into tblEmployeeSkill(eid,skill_name,skill_level) values('E003','CSharp',null)
 
 
 select * from tblEmployeeSkill
 
 --Update a single row--
-update tblEmployeeSkill set skill_level = skill_level+1 where eid= 'E001' and skill_name='C'
+update tblEmployeeSkill set skill_level = skill_level+1 
+where eid= 'E001' and skill_name='C'
 --Updates all rows--
 update tblEmployeeSkill set skill_level = skill_level+1
 --Other--
 update tblEmployeeSkill set skill_level = 7 where eid= 'E001' and skill_name='C'
 update tblEmployee set phone = '7777777777' where id='E003'
 
-update tblEmployee set phone = '7777700000', area='BCA' where id='E003'
-
-
+update tblEmployee 
+set phone = '7777700000', area='BCA' 
+where id='E003'
 
 
 delete from tblEmployee--Wrong he DELETE statement conflicted with the REFERENCE constraint--
 delete from tblEmployeeSkill
 delete from tblEmployee--Now this will work--
 --Delete with selection--
-delete from tblEmployeeSkill where eid='E001'
+delete from tblEmployeeSkill 
+where eid='E001' and skill_name='C'
+
+update tblemployeeskill set skill_level=9
+where eid='E001'
 
 --truncate--
 --Cannot select with where--
 ---Parent tables cannot be truncated--
 truncate table tblskill--Cannot truncate table 'tblskill' because it is being referenced by a FOREIGN KEY constraint.
 --
+truncate table tblemployee
+--or
+delete tblemployee
+where id='E100'
 
---create table tblProduct
---(id int identity(100,1) primary key,
---name varchar(50) not null,
---price float not null check(price>=0),
---quantity int not null check(quantity>=0),
---description varchar(1000)
---)
+drop table tblemployee
+
+
+insert tblEmployee values('E100','Arun','99292992','Blr')
+drop table tblproduct
+
+create table tblProduct
+(pid int identity(100,1) primary key,
+name varchar(50) not null,
+price float not null check(price>=0),
+quantity int not null check(quantity>=0),
+description varchar(1000)
+)
 insert into tblProduct(name,price,quantity,description) 
 values('Doll',280.5,10,'To play with')
 
