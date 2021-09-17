@@ -36,6 +36,7 @@
 --Data Query Language (DQL) and Data Control Language(DCL)
 --? Data Query Language is used to retrieve the data present in the database. DQL Statements are:
 --? SELECT
+
 --? Data Control language is used to control access to the database. DCL statements are:
 --? GRANT
 --? REVOKE
@@ -49,7 +50,13 @@ select firstname,lastname from employees;
 
 --? SQL statement to display derived data:
 
-select firstname+' '+lastname as 'Name' from employees
+select employeeid,firstname+' '+lastname as 'Employee Name',
+ReportsTo as 'Manager Employee Id'
+from employees
+where ReportsTo is not null
+and employeeid!=5
+
+
 select max(birthdate) as average_salary from employees
 --? DISTINCT: get only distinct values in a specified column of a table
 select distinct(city) from employees
@@ -60,9 +67,9 @@ select distinct(city) from employees
 --? Retrieve all products with the category id 1
 SELECT productid, productname, categoryid, unitprice FROM
 products WHERE categoryid = 1
---? Retrieve all products category id is 1 and the model is 2018.
---SELECT productid, productname, categoryid, modelyear, list_price FROM
---products WHERE categoryid = 1 AND modelyear = 2018
+--? Retrieve all products category id is 1 and the product has been discontinued
+SELECT productid, productname, categoryid, discontinued, unitprice FROM
+products WHERE categoryid = 2 AND discontinued=1 -- the product hs been diconitued
 
 SELECT productid, productname, categoryid, unitprice FROM
 products WHERE categoryid = 1 and unitprice>10

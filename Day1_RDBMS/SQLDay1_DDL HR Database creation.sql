@@ -62,7 +62,7 @@ go
 select * from tblEmployee
 go
 
-select employeeid,Name from tblEmployee
+select id,Name from tblEmployee
 go
 --DML Select ,Insert,Update,Delete
 --Insert records
@@ -87,7 +87,7 @@ values(1007,'Jamuna')
 select employeeiD,name,Location
 from tblEmployeeinfo
 --Top
-sp_rename 'tblemployeeinfo', 'tblemployee'
+sp_rename 'tblemployee', 'tblemployeeinfo'
 select top 2 * from tblEmployee
 
 select top 50 percent * from tblEmployee
@@ -129,6 +129,10 @@ dephead int unique)
 
 alter table tblEmployeeInfo
    add DepId int references tblDepartment(Depid)
+alter table tbldepartment
+	--add dephead int references tblEmployeeinfo(id)
+	add  foreign key references tblemployeeinfo(id)
+
 
 insert tblDepartment
 values(1,'Admin',1)

@@ -189,6 +189,6 @@ values('Pen',50,5,'To Write')
 insert into tblProduct(name,price,quantity,description) 
 values('Pencil',-2,5,'To Write')--Wrong The INSERT statement conflicted with the CHECK constraint
 
-insert into tblProduct values(103,'Pencil',2,5,'To Write')--Wrong An explicit value for the identity column in table 'tblProduct' can only be specified whe
+insert into tblProduct values('Pencil',2,5,'To Write')--Wrong An explicit value for the identity column in table 'tblProduct' can only be specified whe
 
 select * from tblProduct
