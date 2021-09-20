@@ -1,12 +1,15 @@
 --print the publisher name and the title that they have published
-select title,pub_name from titles join publishers
-on   publishers.pub_id =titles.pub_id
+select title_id,title,titles.pub_id,pub_name 
+from titles join publishers
+on publishers.pub_id =titles.pub_id
+
+select * from titles,publishers--10 columns in titles + 5  columns in publishers =15 columns and 18*8=144 product of all rows
 
 select title,pub_name from titles,publishers
 where titles.pub_id = publishers.pub_id
-
-select title,pub_name from titles t join publishers p
-on p.pub_id =t.pub_id
+--Natural Join
+select * from titles t join publishers p
+on p.pub_id = t.pub_id
 
 select title,pub_name from titles t,publishers p
 where t.pub_id = p.pub_id
@@ -40,14 +43,29 @@ from titles t join sales s
 on t.title_id = s.title_id
 
 
-select ord_num order_number,t.title_id ,title book_name,qty quantity,price ,qty*price amount 
+select ord_num order_number,t.title_id ,title book_name,s.qty quantity,price ,qty*price amount 
 from titles t join sales s
 on t.title_id = s.title_id
+--using (title_id)
 
-select ord_num,title,pub_name, qty from titles t join sales s
+select ord_num,title,t.pub_id,p.pub_name, qty 
+from titles t join sales s
 on t.title_id = s.title_id 
 join publishers p
 on p.pub_id = t.pub_id
+
+select stor_name,ord_num,ord_Date,qty,
+title,au_lname+' '+au_fname "Author fullname",pub_name
+from titles t join publishers p
+on t.pub_id=p.pub_id
+join sales s on t.title_id=s.title_id
+join stores st
+on st.stor_id=s.stor_id
+join titleauthor ta on ta.title_id=t.title_id
+join authors a on a.au_id=ta.au_id
+
+
+
 
 --print the employee name, title name for every book published
 select CONCAT_WS(' ',fname,lname) employee_name, title book_name, pub_name publisher_name
@@ -80,6 +98,28 @@ where price is not null
 group by pub_name
 having count(title_id) <6
 order by pub_name
+--Outer Join shows all the unmatched records from the first table
+--get all the publisher name and title of the books.
+select pub_name,title from publishers 
+left outer join titles 
+on titles.pub_id = publishers.pub_id
+
+--Outer Join shows all the unmatched records from the first table
+--get all the titles name and their publishers
+select pub_name,title from publishers 
+right outer join titles 
+on titles.pub_id = publishers.pub_id
+
+--Outer Join shows all the unmatched records from the first table
+--get all the titles name and their publishers
+select pub_name,title from publishers 
+ full outer join titles 
+on titles.pub_id = publishers.pub_id
+
+
+select * from titles
+update titles set pub_id=null where title_id='BU1111'
+
 
 --list the store name and count the number of publishers sold by them only if 
 --they have sold more than one publisher's work. sort the output with number of publisher's
@@ -161,11 +201,11 @@ select * from tblEmployee
 alter table tblEmployee
 add constraint fk_MID foreign key(mid) references tblEmployee(eid)
 
-insert into tblEmployee values(101,'Ramu',null)
-insert into tblEmployee values(102,'Somu',null)
-insert into tblEmployee values(103,'Bimu',101)
-insert into tblEmployee values(104,'Komu',102)
-insert into tblEmployee values(105,'Lomu',101)
+insert into tblEmployee values(101,'Kavin',null)
+insert into tblEmployee values(102,'Kanav',null)
+insert into tblEmployee values(103,'Sumedha',101)
+insert into tblEmployee values(104,'Saadhana',102)
+insert into tblEmployee values(105,'Joshitha',101)
 
 select eid,ename,mid from tblEmployee
 

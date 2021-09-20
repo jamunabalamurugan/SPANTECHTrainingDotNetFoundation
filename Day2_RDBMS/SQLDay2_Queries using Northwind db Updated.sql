@@ -76,10 +76,11 @@ products WHERE categoryid = 1 and unitprice>10
 
 --? Get the product whose categoryid  is one or two and unit price is larger than 1,00:
 SELECT * FROM products WHERE (categoryid = 1 OR
-categoryid = 2) AND unitprice > 100
---? Find the products whose list price is less than 200 or greater than 6,000:
+categoryid = 2) AND unitprice > 30
+
+--? Find the products whose list price is less than 200 or greater than 600:
 SELECT productname, unitprice FROM products WHERE
-unitprice < 200 OR unitprice > 600
+unitprice < 200 OR unitprice > 300
 
 --Filtering rows Between and Not Between:
 --? Find the products whose list prices are between 1,899 and 1,999.99
@@ -117,7 +118,7 @@ customers WHERE phone IS NOT NULL
 --Filtering rows using wild cards:
 --? Find products whose name contains the string “Cruiser”
 SELECT productid, productname, categoryid, unitprice
-FROM products WHERE productname LIKE '%Cruiser%'
+FROM products WHERE productname LIKE '%us%'
 
 --? Find the customers whose  name starts with the letter z:
 SELECT customerid, contactname FROM customers
@@ -152,14 +153,19 @@ WHERE contactname NOT LIKE 'A%'
 
 
 
+
 --Filtering rows with TOP:
 SELECT TOP 10 productname, unitprice FROM products
 ORDER BY unitprice DESC;
 SELECT TOP 1 PERCENT productname, unitprice FROM
 products ORDER BY unitprice DESC;
-SELECT TOP 3 WITH TIES productname, unitprice FROM
-products ORDER BY unitprice DESC;
+SELECT TOP 3 WITH TIES productname, unitprice 
+FROM products 
+ORDER BY unitprice ASC;
 
+SELECT TOP 3 productname, unitprice 
+FROM products
+ORDER BY unitprice ASC;
 
 
 --With SQL, how do you select all the records from a table named
@@ -251,10 +257,17 @@ SELECT * FROM Employees WHERE FirstName LIKE '%a'
 --Sql Server Built-in function:
 --? Aggregate functions:
 --? Find the average list price of all products in the products table:
- SELECT AVG(unitprice) avg_product_price FROM products
+ SELECT AVG(unitprice) avg_product_price ,min(unitprice)
+ FROM products
 --? Find the number of products whose price is greater than 500:
  SELECT COUNT(QuantityPerUnit) product_count FROM products 
- WHERE unitprice between 50 and  100
+ WHERE unitprice between 200 and 300
+ --?Find the product with maximum stock
+ -- select max(unitsinstock) from products
+select top 1 productid,productname,UnitsInStock
+from products
+order by unitsinstock desc
+
  select * from products where QuantityPerUnit is null
  update products set unitprice=0 where UnitPrice is null
 
@@ -266,8 +279,8 @@ SELECT * FROM Employees WHERE FirstName LIKE '%a'
 --? Calculate the total stock by product:
  SELECT SUM(unitsinstock) stock_count FROM products
 
-
-
+ select count(fax) from customers
+ select count(*) from customers
 --Which SQL function is used to count the number of rows in a
 --SQL query?
 --COUNT(*)
@@ -287,7 +300,7 @@ ORDER BY firstname DESC;
 --? Retrieve first name, last name, and city of the employees sorted by the city first and
 --then by the first name.
 SELECT city, firstname, lastname FROM employees
-ORDER BY city, firstname;
+ORDER BY city desc, firstname desc;
 
 
 

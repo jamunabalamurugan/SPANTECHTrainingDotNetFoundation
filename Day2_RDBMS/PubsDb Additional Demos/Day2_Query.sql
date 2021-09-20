@@ -8,7 +8,7 @@ select title_id,title from titles
 select title,title_id from titles
 select title,type from titles
 select title book_name , type book_type from titles
-select title 'book name' , type book_type from titles
+select title 'Book Name' , type book_type from titles
 
 select * from titles where type='trad_cook'
 select * from titles where type='trad_cook' or type = 'business'
@@ -62,7 +62,7 @@ select CONCAT_ws(' ',au_fname,au_lname) from authors
 select UPPER(title) from titles
 select Lower(title) from titles
 select SUBSTRING(title,1,4) from titles
-select CHARINDEX(' ',title,1) from titles
+select CHARINDEX('a',title,1) from titles
 select SUBSTRING(title,CHARINDEX(' ',title,1)+1,4) from titles--second word's 4 chars
 select LEN(title) from titles
 
@@ -70,9 +70,9 @@ select SYSDATETIME()
 select GETDATE()
 select FORMAT(getdate(),'dd-MMMM-yyyy hh:mm')
 
-select pubdate,DATEADD(DAY,3,pubdate) from titles
+select pubdate,DATEADD(DAY,3,pubdate) actualpublish from titles
 
-select pubdate,DATEDiff(MONTH,pubdate,getdate()) from titles
+select pubdate,DATEDiff(year,pubdate,getdate()) from titles
 
 select top 2 * from titles
 
@@ -80,15 +80,31 @@ select top 5 * from titles order by price
 
 select * from titles
 
-select type,count(title_id),sum(price) from titles group by type
-select pub_id,count(title_id) from titles group by pub_id
+select count(title_id),sum(price),avg(price) from titles
 
-select pub_id,count(title_id) from titles where price>10 group by pub_id
+select  type,count(title_id) count,sum(price) total
+from titles group by type
 
-select pub_id,count(title_id) from titles  group by pub_id having count(title_id)>5
-select pub_id,count(title_id) from titles where price>10  group by pub_id having count(title_id)>3
+select pub_id,count(title_id) from titles
+group by pub_id
 
-select pub_id,count(title_id) from titles  group by pub_id having count(title_id)>5 order by 2
+select pub_id,count(title_id) from titles 
+where price>10 group by pub_id
+
+select pub_id,count(title_id) from titles 
+group by pub_id having count(title_id)>5
+
+select pub_id,count(title_id) from titles
+where price>10 
+group by pub_id 
+having count(title_id)>3
+
+select pub_id,count(title_id) from titles 
+group by pub_id 
+having count(title_id)>5
+order by 2
+
+
 select pub_id,count(title_id) title_count from titles  group by pub_id having count(title_id)>5 
 order by title_count
 select pub_id,count(title_id) title_count from titles  group by pub_id having count(title_id)>5 
@@ -96,10 +112,12 @@ order by count(title_id)
 
 
 select pub_id,count(title_id) title_count from titles 
-where price>10  
+where price>1
 group by pub_id 
-having count(title_id)>3
-order by count(title_id)
+having count(title_id)>1
+order by title_count
+
+--order by count(title_id)
 
 select * from publishers
 select pub_id from publishers where pub_name = 'New Moon Books'
