@@ -1,23 +1,3 @@
-use pubs
-
-create function fn_first()
-returns varchar(20)
-as
-begin 
-  return 'Hello world'
-end
-
-select dbo.fn_first()
-
-select * from titles
-
-create function fn_CalculateTax(@amount float)
-returns money
-as
-begin
-   return (@amount*12.2/100)
-end
-select advance,dbo.fn_CalculateTax(advance) tax_amount from titles
 
 create function fn_Table_Example()
 returns @MyTable table(f1 int,f2 varchar(10))
@@ -29,6 +9,82 @@ begin
 end
 
 select * from dbo.fn_Table_Example()
+
+--Table valued Functions
+alter function fun_getdetails
+ (@location varchar(20))
+ returns table
+ as
+return( select firstname,lastname from employees
+where city=@location )
+
+--Calling a table valued function in from clause
+select *
+from dbo.fun_getdetails('London') 
+
+--Indexes
+--To speed up data retrieval indexes ae used
+--enforce uniquenesss of rows
+
+--Adv
+--2 types
+--clustered--english dictionary,one ci per table,root page,immediate page,Data page
+--non clustered-Atlas-249 nci per table,data is present in random order,root page,immediatepage,leaf page,data page
+
+create nonclustered index indxCity
+on tblemployeeinfo(location)
+
+
+create clustered index indxdept
+on indexeg(depid)
+
+
+create table indexeg
+(
+depid int,
+depname varchar(30),
+location varchar(30))
+
+create nonclustered index indxCity1
+on indexeg(location)
+
+sp_help tblemployeeinfo
+
+drop index indxCity1 on indexeg 
+
+drop index indxdept on indexeg
+drop table indexeg
+
+--Triggers
+--Insert(trigger table..Eg.Departments,(Magic)inserted)
+--Delete(trigger table rows are deleted and the row is added into (Magic)deleted table
+--Update
+
+
+
+
+--Creating triggers
+select employeeid,firstname,lastname
+ into myemployees from employees
+
+CREATE TRIGGER trgEmployeeDelete ON Employees
+FOR DELETE 
+AS
+IF (SELECT COUNT(*) FROM Deleted) > 1
+BEGIN
+   RAISERROR('You cannot delete more than one employee at a time.', 16, 1)
+   ROLLBACK TRANSACTION
+END
+
+insert into employees values(1003,'Akhil','V','Akilv@gmail.com','9444077777','01/23/2018','IT',40000,null,null,2)
+insert into employees values(1004,'Akhilandeshwari','V','Akiladeshwari@gmail.com','9444077777','01/23/2018','IT',40000,null,null,2)
+
+delete from employees
+where first_name like 'Ak%'
+
+select * from employees
+insert employees(
+
 
 create table tblUserdetails
 (username varchar(20) primary key,
@@ -54,13 +110,15 @@ begin
    @rol varchar(20)
    set @rol = (select role from tblUserdetails where username = @un and password = @pass)
    if (select count(role) from tblUserdetails where username = @un and password = @pass )<1
-      set @rol = 'Error'
+      set @rl = 'Error'
+	else
+		set @rl=@rol
 end
 
 	begin
 		declare
 		@checkRole varchar(20)
-		exec proc_Login_Check 'Kavin','123', @checkRole out
+		exec proc_Login_Check 'Kavin','1234', @checkRole out
 		print @checkRole
 	end
 
@@ -82,6 +140,7 @@ end
  
 
 exec inserttosalary 1002,54000,5000,4000,1000
+exec inserttosalary 1003,64000,6000,5000,2000
 drop table tbl_employee
 
 create table tbl_employee(
@@ -90,7 +149,7 @@ ename varchar(20),
 sa_id int references tblSalary(salid),
 leaveCount int)	
 
-alter proc pro_Insert_into_tbl_employee(@en varchar(20),@sa_id int,@leaveCount int)
+create proc pro_Insert_into_tbl_employee(@en varchar(20),@sa_id int,@leaveCount int)
 as 
 begin
     insert into tbl_employee values (@en,@sa_id,@leaveCount )
@@ -98,7 +157,7 @@ begin
 end
 
 select * from tbl_employee
-pro_Insert_into_tbl_employee 'Ramu',1003,2
+pro_Insert_into_tbl_employee 'Kavin',1003,2
 pro_Insert_into_tbl_employee 2,3
 pro_Insert_into_tbl_employee 3,3
 
@@ -148,7 +207,7 @@ end
 
 update tbl_employee set leavecount = 6
 
-select * from dbo.fn_GetSalWithEID(1)
+select * from dbo.fn_GetSalWithEID(2)
 
 create table tbl_Tri_Ex
 (f1 varchar(20))
@@ -163,7 +222,7 @@ end
 
 drop trigger trg_Insert_First
 
-insert into tbl_Tri_Ex values('Jimu')
+insert into tbl_Tri_Ex values('Kayan')
 
 select * from tbl_Tri_Ex
 
@@ -188,11 +247,14 @@ as
 begin
    declare 
    @sal float
-   set @sal = (select (basi+hra+da-deductions) from tblsalary where salid=(select sa_id from inserted))
+   set @sal = (select (basi+hra+da-deductions) from tblsalary 
+   where salid=(select sa_id from inserted))
    print @sal
+   --update tblexpenses set salaryexp=salaryexp+@sal
+
 end
 
-pro_Insert_into_tbl_employee 'Somu',1002,2
+pro_Insert_into_tbl_employee 'Kanav',1002,2
 
 select * from tblsalary
 select * from tbl_employee

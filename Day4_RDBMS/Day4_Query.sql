@@ -26,7 +26,7 @@ group by city
 begin
   declare
   @username varchar(20)
-  set @username = 'Ramu'
+  set @username = 'Kavin'
   select substring(@username,1,2) username
   print 'welcome'
 end

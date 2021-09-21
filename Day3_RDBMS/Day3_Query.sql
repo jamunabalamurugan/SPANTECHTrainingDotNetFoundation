@@ -160,12 +160,27 @@ join titles t
 on t.pub_id=e.pub_id
 group by concat(fname,' ',lname)
 --2) print the store name, title name, total price , quantity, price, publisher name for every book
-select title book,stor_name, qty*price total, qty,price, pub_name from sales s join stores s1
+select title book,stor_name, qty*price total, qty,price, pub_name 
+from sales s join stores s1
 on s1.stor_id = s.stor_id
 join titles t
 on t.title_id = s.title_id
 join publishers p
 on p.pub_id =t.pub_id
+
+select title book, sum(qty*price) total 
+from sales s join stores s1
+on s1.stor_id = s.stor_id
+join titles t
+on t.title_id = s.title_id
+join publishers p
+on p.pub_id =t.pub_id
+group by title
+
+
+
+
+
 
 
 --3) print every book name and  its auth's full name

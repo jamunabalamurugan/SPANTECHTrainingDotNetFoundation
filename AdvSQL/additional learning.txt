@@ -1,0 +1,449 @@
+ 	Scalar functions include the following components:
+ 	Function name with optional schema/owner name
+ 	Input parameter name and data type
+ 	Options applicable to the input parameter
+ 	Return parameter data type and optional name
+ 	Options applicable to the return parameter
+ 	One or more T-SQL statements
+ 	Scalar functions can be created by using the CREATE FUNCTION statement.
+ 	Syntax:
+CREATE FUNCTION [ schema_name. ] function_name 
+( [ { @parameter_name [ AS ][ type_schema_name. ] parameter_data_type 
+[ = default ] } 
+[ ,...n ]
+]
+)
+RETURNS return_data_type
+[ WITH <function_option> [ ,...n ] ]
+[ AS ]
+BEGIN 
+function_body 
+RETURN scalar_expression
+END
+[ ; ]
+	Let’s see how…
+Example:
+CREATE FUNCTION HumanResources.MonthlySal ( @PayRate float) 
+RETURNS float 
+AS 
+BEGIN 
+RETURN (@PayRate * 8 * 30) 
+END 
+DECLARE @PayRate float 
+SET @PayRate = HumanResources.MonthlySal(12.25) 
+PRINT @PayRate
+
+
+ 	Table-valued functions:
+ 	Returns a table as an output, which can be derived as a part of a SELECT statement
+ 	Uses the table data type to store the set of rows 
+ 	Are of following two types:
+ 	Inline table-valued function
+ 	Multistatement table-valued function
+	Let’s see how…
+In this slide, you need to explain the students about Table-Value Functions. 
+Example: (inline table-valued function)
+USE AdventureWorks
+go
+CREATE FUNCTION fx_Department_GName
+( @GrName nvarchar(20) )
+RETURNS table
+AS
+RETURN (
+        SELECT *
+        FROM HumanResources.Department
+        WHERE GroupName=@GrName
+	 )
+go
+After creating the function, calling the function with specified argument.
+SELECT * FROM fx_Department_GName('Manufacturing')
+Example: (multistatement table-valued function)
+CREATE FUNCTION PayRate (@rate money) 
+RETURNS @table TABLE 
+(EmployeeID int not null, 
+RateChangeDate datetime not null, 
+Rate money not null, 
+PayFrequency tinyint not null, 
+ModifiedDate datetime not null) 
+AS 
+BEGIN 
+INSERT @table 
+SELECT * 
+FROM HumanResources.EmployeePayHistory 
+WHERE Rate > @rate
+RETURN 
+END 
+Select * from PayRate(45)
+ 	Problem Statement:
+ 	As a database developer ,you need to create a function that accepts the employee ID of an employee and returns the following details:
+ 	Employee ID
+ 	Name of the employee
+ 	Title of the employee
+ 	Number of other employees working under the employee
+	How will you create the function?
+
+ 	A stored procedure is a collection of various T-SQL statements that are stored under one name and are executed as a single unit.
+ 	A stored procedure can be created using the CREATE PROCEDURE statement.
+ 	A stored procedure allows you to declare parameters, variables, and use T-SQL statements and programming logic.
+ 	A stored procedure provides better performance, security, and accuracy, and reduces the network congestion.
+ 	A stored procedure is a collection of various T-SQL statements that are stored under one name and are executed as a single unit.
+ 	A stored procedure can be created using the CREATE PROCEDURE statement.
+ 	A stored procedure allows you to declare parameters, variables, and use T-SQL statements and programming logic.
+ 	A stored procedure provides better performance, security, and accuracy, and reduces the network congestion.
+ 	A stored procedure accepts data through input parameters.
+ 	A stored procedure returns data through the output parameters or return statements.
+ 	A stored procedure can be executed by using the EXECUTE statement.
+ 	A stored procedure can be altered by using the ALTER PROCEDURE statement.
+ 	A user-defined function is a database object that contains a set of T-SQL statements.
+ 	The user-defined functions can return either a single scalar value or a result set.
+ 	UDFs are of two types: scalar functions and table-valued functions.
+ 	A scalar function accepts a single value and returns a single value. 
+ 	A table-valued function returns a table as an output, which can be derived as a part of a SELECT statement.
+
+
+ 	Triggers are of the following types:
+ 	DML triggers
+ 	DDL triggers
+ 	In this slide, you need to explain the triggers and various types of triggers to the students. 
+ 	Stress on the fact that triggers are used when complex business rules have to be implemented. While constraints can be used to maintain referential integrity, triggers can also be used if required.
+ 	Mention that triggers are a special type of stored procedure, but cannot be executed explicitly. 
+ 	Mention that the overhead involved with a trigger is very high, but the functionality provided is also very good.
+ 	You also need to touch upon the cascade delete, restrict delete, and nullify delete rules in your class. If a record is deleted from the master table, then the corresponding records from the transaction table also get deleted. This is the cascade delete rule. In the restrict delete rule, if an open transaction exists in the transaction table, then the corresponding records in the parent table cannot be deleted. In the nullify delete rule, if a record is deleted from a parent table, then the corresponding values in the foreign key column of the child tables is replaced by NULL.
+
+ 	You want to make changes in another database object whenever any new database object is created. Which of the following triggers will you use?
+1.	DML Trigger
+2.	Instead Of Trigger
+3.	DDL Trigger
+4.	Nested Trigger
+ 	Triggers:
+ 	Are created using the CREATE TRIGGER statement
+ 	Syntax:
+		CREATE TRIGGER trigger_name 
+		ON { OBJECT NAME } 
+		{ FOR | AFTER | INSTEAD OF } { event_type [
+		,...n ] |      
+	 DDL_DATABASE_LEVEL_EVENTS }   
+   { AS 
+   { sql_statement [ ...n ] }
+   } 
+ 	Create two temporary tables called magic tables
+	Let’s see how…
+In this slide, you need to explain creating triggers to the students.
+Example:
+CREATE TRIGGER [HumanResources].[trgDepartment] ON [HumanResources].[Department] 
+AFTER UPDATE AS
+BEGIN
+    UPDATE [HumanResources].[Department]
+    SET [HumanResources].[Department].[ModifiedDate] = GETDATE()
+    FROM inserted
+    WHERE inserted.[DepartmentID] = [HumanResources].[Department].[DepartmentID];
+END;
+CG NOTE: For demonstration of this example, you can use the create_trDepartment.sql file from the Datafiles_for_faculty\Chapter 8 folder in the TIRM CD. In this file, you will find the code to create the trigger as well as to create the trgMagic trigger and the update statement to verify the trigger. 
+FAQ:
+Q: When does a trigger get executed?
+After a DML (update, insert, or delete) transaction. 
+Q: If there exists a trigger and a rule, which will get executed first?
+The rule will get executed first.
+Additional Inputs
+The maximum nesting level for triggers is 32.
+You cannot create triggers on system tables.
+Triggers unlike stored procedures do not return values or result sets.
+If multiple business rules need to be applied when a DML operation is underway use multiple triggers for implementing the same. For example, if three columns are being updated and different business rules have to be applied for each, use three different update triggers for each business rule.
+SQL Server allows recursive triggers. Recursion occurs when the same trigger gets executed again and again. There are two types of recursion, direct and indirect. For example, if an application updates table T3, the trigger TRIG3 defined on the table for update gets executed. This trigger again does an updation on the table T3, thereby, re-executing the trigger TRIG3. This is an example of direct recursion.  If an application updates table T3, the trigger TRIG3 defined on the table for update gets executed. This trigger updates another table T4, this executes trigger TRIG4 defined for update on the table. TRIG4 updates table T3 thereby executing TRIG3. This is an example of indirect recursion.
+To enable recursive triggers for a particular database, issue the following command: sp_dboption <databasename>, ‘recursive triggers’, True.
+ 	Involve altering a trigger
+ 	Syntax:
+		ALTER TRIGGER trigger_name 
+		{ FOR | AFTER } { event_type [ ,...n ] | 	DDL_DATABASE_LEVEL_EVENTS }   
+		{ AS 
+		{ sql_statement [ ...n ] }
+		} 
+ 	Involve deleting a trigger 
+ 	Syntax:
+DROP TRIGGER { trigger } 
+	Let’s see how…
+In this slide, you need to explain managing the triggers to the students. State that managing trigger includes altering the trigger and deleting a trigger.
+Example:
+ALTER TRIGGER HumanResources.trgInsertShift
+ON HumanResources.Shift
+FOR INSERT
+AS
+	DECLARE @ModifiedDate datetime
+	SELECT @ModifiedDate = ModifiedDate	FROM Inserted
+	IF (@ModifiedDate != getdate())
+	BEGIN
+RAISERROR (’The modified date is not the current date. The transaction cannot be processed.',10, 1)
+		ROLLBACK TRANSACTION
+	END
+     RETURN 
+CG Input: For demonstration use the alter_trgInsertShift.sql file in the datafiles_for_faculty\chapter 8 folder in the TIRM CD. 
+Example:
+DROP TRIGGER HumanResources.trgMagic
+Create view vwEmployee as
+select e.EmployeeID as 'Employee ID',
+h.FirstName as 'Employee Name', g.Name as 'Department
+Name', e.HireDate as 'Date of Joining',  j.AddressLine1
+as 'Employee Address'from HumanResources.Employee as e
+join HumanResources.EmployeeDepartmentHistory as f on 
+e.EmployeeID = f.EmployeeID join
+HumanResources.Department as g
+on f.DepartmentID = g.DepartmentID 
+join Person.Contact as h on e.ContactID = h.ContactID
+join HumanResources.EmployeeAddress as i on 
+e.EmployeeID = i.EmployeeID join Person.Address as j
+on i.AddressID = j.AddressID
+
+
+ 
+ 	Transactions:
+ 	Execute a number of statements as a single unit
+ 	Must possess the four properties called ACID
+ 	Are of the following types:
+ 	Autocommit transactions
+ 	Explicit transactions
+ 	Autocommit Transactions:
+ 	Is the default transaction management mode of SQL Server
+ 	Explicit Transactions:
+ 	Can be created using the BEGIN TRANSACTION and COMMIT TRANSACTION statements
+	Let’s see how…
+In this slide, you need to explain the concept of transactions to the students. In addition, also explain the ACID properties of a transaction.
+BEGIN TRAN myTran
+SELECT * FROM HumanResources.Department
+COMMIT TRAN myTran 
+FAQ:
+To switch between the implicit and the explicit modes, use the SET IMPLICIT_TRANSACTIONS {ON | OFF} statement
+In the implicit mode the following statements trigger off a transaction: ALTER TABLE, INSERT, OPEN, CREATE, DELETE, REVOKE, DROP, SELECT, FETCH, TRUNCATE TABLE, GRANT, UPDATE.
+The number of open transactions per connection is stored in the system variable @@TRANCOUNT. Every new transaction i.e. every BEGIN TRANSACTION increments the value of this system variable by one and every COMMIT TRANSACTION or ROLLBACK TRANSACTION decrements the value by one. In the implicit mode, every issue of the above mentioned commands automatically generates a BEGIN TRANSACTION.
+Experiences:
+Transaction
+Stress on the fact that a transaction is an atomic unit of work, which either happens completely or does not happen at all. If an insert operation in one table and two update operations in two different tables constitute a logical unit of work, then the three operations can be termed as a transaction. If only one insert happens and the other two updates do not happen, the transaction is not complete and may result in inconsistency of data. Hence, it is essential that all the operations happen or none of them happens at all. Explicit statements like BEGIN TRANSACTION and COMMIT TRANSACTION ensure that all statements in a transaction are completed successfully or do not take place at all in case there is a system crash while the transaction is running. 
+By default SQL Server uses a row level lock.
+Tell the students that the transactions should be as short as possible, and table level locks should be avoided as this locks the entire table.
+If multiple transactions refer to the same tables, then refer them in a specific order to minimize deadlocks.
+While creating a transaction, follow the naming conventions. Prefix the transaction name with a ‘trn’.
+Transaction Log
+Tell the students that the transaction log is like a huge ‘security register’ where any activity on the database gets recorded. The log is used to roll forward or rollback transactions in case of a system failure. Tell them that the transaction log plays a big role in transaction management.
+Transaction Modes
+There are two types of transaction modes, explicit and implicit. The default is implicit, this can be changed by using BEGIN TRANSACTION, COMMIT TRANSACTION, COMMIT WORK, ROLLBACK TRANSACTION, and ROLLBACK WORK.
+SAVE TRANSACTION can be used to save transactions to a certain point. Tell the students when SAVE TRANSACTION is used, and if we rollback a transaction then the transaction rolls back only up till the save point.
+Distributed Transactions
+Unlike normal transactions, a distributed transaction is processed on more than one database server.
+
+
+ 	Transactions are reverted:
+ 	When the execution of transaction is in an invalid state
+ 	To maintain consistency
+ 	Using the ROLLBACK TRANSACTION and ROLLBACK WORK statements 
+ 	Syntax:
+ROLLBACK [TRAN[SACTION] [transaction_name
+|@tran_name_variable
+|savepoint_name |
+@savepoint_variable]]
+	Let’s see how…
+In this slide, you need to explain to revert the changes done by a transaction to the students.
+Example:
+BEGIN TRANSACTION TR
+BEGIN TRY
+UPDATE Person.Contact 
+SET EmailAddress='jolyn@yahoo.com' 
+WHERE ContactID = 1070
+UPDATE HumanResources.EmployeeAddress SET AddressID = 
+32533 
+WHERE EmployeeID = 1
+COMMIT TRANSACTION TR
+SELECT 'Transaction Executed'
+END TRY
+BEGIN CATCH
+ROLLBACK TRANSACTION TR
+SELECT 'Transaction Rollbacked'
+END CATCH
+
+
+ 	Locks:
+ 	Help in achieving transactional integrity
+ 	Help in avoiding: 
+ 	Lost updates
+ 	Uncommitted dependency 
+ 	Inconsistent analysis (Dirty Read)
+ 	Phantom reads 
+ 	Supported by SQL Server are:
+ 	Shared locks
+ 	Exclusive locks
+ 	Update locks
+ 	Intent locks
+ 	Schema locks
+ 	Bulk update locks
+ 	In this slide, you need to explain transactional integrity, problems that occur due to transactional integrity, and implementing transactional integrity in your transactions. In addition, you also need to talk about 
+ 	Concurrency Problems 
+ 	Find below the examples for each of the concurrency problems:
+ 	Lost updates 
+ 	Lost updates occur when two or more transactions select the same row and then update the row based on the value originally selected. Each transaction is unaware of the other transaction. The last update overwrite updates made by the other transaction, which results in lost data.
+ 	Let us assume that both Sam and Anne are simultaneously trying to update the price of all the “Business” books in the Titles table. Sam is trying to update the price by 10% while Anne is trying to update the price by 15%. 
+ 	Now, the table will get updated by the changes of the query that will get completed last. That means, if Sam’s query is executed later than Anne’s query, then the price column in titles table will get increased by 10% and the changes made by Anne’s query will be lost.
+ 	Uncommitted dependency
+ 	Uncommitted dependency occurs when a second transaction selects a row that is being updated by another transaction. The second transaction is reading data that has not been committed yet and may be changed by the transaction updating the row.
+ 	Let us assume User A and B are working on titles table. User A had increased the price of title_id  ‘BU1032’ by Rs. 10. But user A does not commit the transaction. Now User B tries to execute a query on title_id  ‘BU1032’. User B is accessing old record as the transaction handle by user A is not yet complete. Therefore user B also updates the price of title_id ‘BU1032’ by Rs. 5. These transactions will update the record by Rs 15. Such kind of problems leads to inconsistency in the table.
+ 	Inconsistent Analysis
+ 	Inconsistent analysis occurs when a second transaction accesses the same row several times and reads different data each time. Inconsistent analysis is similar to uncommitted dependency in that another transaction is changing the data that a second transaction is reading. However, in inconsistent analysis, the data read by the second transaction was committed by the transaction that made the change. Also, inconsistent analysis involves multiple reads (two or more) of the same row and each time the information is changed by another transaction; thus, the term nonrepeatable read.
+ 	For example:
+ 	Let us assume that you are accessing the online reservation system to check the status of your ticket. The site showed the status as ‘Waiting’. Just a little later, when you refreshed the page, you found that the status is ‘confirmed’.  This shows that while you were browsing thru the information, some procedure was updating the record information. 
+ 	Phantom reads
+ 	Phantom reads occur when an insert or delete action is performed against a row that belongs to a range of rows being read by a transaction. The transaction's first read of the range of rows shows a row that no longer exists in the second or succeeding read, as a result of a deletion by a different transaction. Similarly, as the result of an insert by a different transaction, the transaction's second or succeeding read shows a row that did not exist in the original read.
+ 	For Example:
+ 	You are accessing online catalog of a book store. You found a book name “You can win” in your initial search where you are looking for titles having “win” in their title name. But subsequent search of the same query did not show “You can win” in the output. The reason can be that some procedure might have deleted the title from the table.  
+ 	Note: Though these scenarios will help you to explain the concept, please clarify to the students that these situations occur in remote multi-user environment. They will not find similar scenario while working in the MR.
+ 	LOCKS
+ 	Discuss the types of locks in detail. Also, discuss when each of these locks are used by SQL Server.
+ 	SQL Server uses row lock by default.
+ 	The concept of deadlock needs to be explained to the students.
+ 	Tell the students that if the deadlock priority is set low for a transaction, then the transaction has a higher probability of becoming the deadlock victim in a deadlock situation.
+ 	Mention that lock_timeout is used on a transaction if you do not want a transaction to wait for an indefinite period. Using lock_timeout you can mention in milliseconds how long a transaction will wait for a lock to open.
+ 	Tell the students that whenever an ad hoc DML statement is executed, SQL Server, by default, treats the statement as a transaction and commits the transaction. This mode is called the auto commit mode. 
+ 	Tell the students that although SQL Server 2000 uses dynamic locking, it is still very important for you to differentiate between the different locking modes. The different types of locks used by SQL Server 2000 are shared, update, exclusive, intent, schema, and bulk-update.
+ 	Locking is controlled by the following types of isolation levels:
+ 	READ UNCOMMITTED
+ 	READ COMMITED
+ 	REPEATABLE READ
+ 	SNAPSHOT
+ 	SERIALIZABLE
+ 	In this slide, you need to explain the concept of Isolation Level. 
+ 	Example:
+ 	SET TRANSACTION ISOLATION LEVEL
+ 	READ COMMITTED
+ 	BEGIN TRANSACTION TR
+ 	BEGIN TRY
+ 	UPDATE Person.Contact 
+ 	SET EmailAddress='jolyn@yahoo.com' 
+ 	WHERE ContactID = 1070
+ 	UPDATE HumanResources.EmployeeAddress SET AddressID = 
+ 	32533 
+ 	WHERE EmployeeID = 1
+ 	COMMIT TRANSACTION TR
+ 	SELECT 'Transaction Executed'
+ 	END TRY
+ 	BEGIN CATCH
+ 	ROLLBACK TRANSACTION TR
+ 	SELECT 'Transaction Rollbacked'
+ 	END CATCH
+ 	Additional Inputs
+ 	Timeouts can be used to prevent deadlocks. 
+ 	For multiple transactions running simultaneously on a SQL Server, you can define their isolation level to balance between concurrency and data integrity. By choosing the right transaction, isolation level can improve performance of the SQL Server queries. There are four transaction isolation levels: 
+ 	Read Committed This is the default isolation level. 
+ 	Read Uncommitted The restriction in this isolation level is the least as there are no shared or exclusive locks. This allows data updates before the transaction is over.
+ 	Repeatable Read In this isolation level, rows can be added but existing data cannot be updated.
+ 	Serializable Data integrity is the highest in this isolation level but concurrency between transactions is very low. Data involved in this transaction isolation level is locked. Transactions with this isolation level execute one by one. 
+ 	The syntax for setting transaction isolation levels is shown  below:
+ 	SET TRANSACTION ISOLATION LEVEL {READ COMMITTED|READ
+UNCOMMITTED|REPEATABLE READ|SERIALIZABLE}
+ 	When an INSENSETIVE cursor is created SQL Server stores the result set of the cursor in a temporary table in the tempdb database. This result set does not get updated with changes made to the base table(s). Apart from this the cursor itself is a read-only cursor i.e. it cannot be updated. The following code declares an INSENSETIVE cursor:
+ 	DECLARE curPublishers CURSOR
+ 	FOR SELECT * FROM publishers
+ 	OPEN curPublishers
+ 	FETCH NEXT FROM curPublishers <<<example needs to be changed>>>
+ 	Locks can be implemented using the SET TRANSACTION ISOLATION LEVEL statement:
+ 	Syntax:
+SET TRANSACTION ISOLATION LEVEL {
+READ UNCOMMITTED  | 
+READ COMMITTED | REPEATABLE
+READ | SNAPSHOT | SERIALIZABLE } [ ;]
+BEGIN TRANSACTION
+………
+………
+COMMIT TRANSACTION
+	Let’s see how…
+Example:
+SET TRANSACTION ISOLATION LEVEL
+READ COMMITTED
+BEGIN TRANSACTION TR
+BEGIN TRY
+UPDATE Person.Contact 
+SET EmailAddress='jolyn@yahoo.com' 
+WHERE ContactID = 1070
+UPDATE HumanResources.EmployeeAddress SET AddressID = 
+32533 
+WHERE EmployeeID = 1
+COMMIT TRANSACTION TR
+SELECT 'Transaction Executed'
+END TRY
+BEGIN CATCH
+ROLLBACK TRANSACTION TR
+SELECT 'Transaction Rollbacked'
+END CATCH
+Additional Inputs
+Timeouts can be used to prevent deadlocks. 
+For multiple transactions running simultaneously on a SQL Server, you can define their isolation level to balance between concurrency and data integrity. By choosing the right transaction, isolation level can improve performance of the SQL Server queries. There are four transaction isolation levels: 
+Read Committed This is the default isolation level. 
+Read Uncommitted The restriction in this isolation level is the least as there are no shared or exclusive locks. This allows data updates before the transaction is over.
+Repeatable Read In this isolation level, rows can be added but existing data cannot be updated.
+Serializable Data integrity is the highest in this isolation level but concurrency between transactions is very low. Data involved in this transaction isolation level is locked. Transactions with this isolation level execute one by one. 
+The syntax for setting transaction isolation levels is shown  below:
+SET TRANSACTION ISOLATION LEVEL {READ COMMITTED|READ
+UNCOMMITTED|REPEATABLE READ|SERIALIZABLE}
+When an INSENSETIVE cursor is created SQL Server stores the result set of the cursor in a temporary table in the tempdb database. This result set does not get updated with changes made to the base table(s). Apart from this the cursor itself is a read-only cursor i.e. it cannot be updated. The following code declares an INSENSETIVE cursor:
+DECLARE curPublishers CURSOR
+FOR SELECT * FROM publishers
+OPEN curPublishers
+FETCH NEXT FROM curPublishers <<<example needs to be changed>>>
+ 	You can resolve deadlocks by:
+ 	Detecting deadlocks
+ 	Avoiding deadlocks by using Update locks
+ 	In this slide, you need to explain the concept of deadlocks and how to resolve them. Do not execute any of the statements in the class, instead focus on clearing the concept.
+ 	Deadlock
+ 	Suppose a delete trigger called Trigger1 has been defined on a table called Table1 and there is a delete trigger called Trigger2 on another table called Table2. Trigger1 deletes a row on Table2 and Trigger2 deletes a row on Table1. If you delete a row in Table1, then Trigger1 will try to obtain an exclusive lock on Table2 and Trigger2, which will be fired now, will try to acquire an exclusive lock on Table1 that is already locked. Both these transactions wait for the other to release the locks imposed by them. This causes a stalemate because neither application can release its locks and finish its session while waiting for the other application to release its locks. SQL Server automatically fixes this by choosing one application, forcing it to release the lock and allowing the other session to continue. By setting the DEADLOCK PRIORITY, you can decide which session is more likely to be the next deadlock looser. SQL Server will release the lock of the session that has lower priority. Set the DEADLOCK PRIORITY using the following syntax: SET DEADLOCK_PRIORITY {LOW | NORMAL}.
+ 	FAQ:
+ 	Q.: How does the transaction log help in transaction management?
+ 	Every transaction is recorded in the transaction log to maintain database consistency and aid in recovery.
+ 	Q: When will SQL Server use an update lock?
+ 	When updating rows, SQL Server first searches for the records and uses a shared lock in the process. Once the records are located, the shared lock is upgraded to an exclusive lock. If another transaction has applied a shared lock on the resource, the shared lock imposed while searching for the records cannot be upgraded. To avoid this SQL Server uses an update lock while updating records.
+ 	Q: In case there are a lot of transactions, which lock will you request for while updating a row in a table? 
+ 	You should request for an intent lock. Intent locks impose locks higher up in the hierarchy and only those locks are compared instead of comparing locks in the lower level.
+ 	Which of the following locks enable others to view the data being modified by the current transaction?
+1.	Shared lock
+2.	Exclusive lock
+3.	Update lock
+4.	Intent lock
+5.	Bulk update lock
+
+Ans:1 Shared Lock
+
+ 	., an employee named Sidney Higa, who is currently working as Production Technician – WC10 has been promoted as Marketing Manager. The employee ID of Sidney is 13. As a database developer, you need to update his records. This involves updating the title in the Employee table and updating the department history details.
+	You need to ensure that all the changes take effect. In addition, you need to ensure that no other transaction should be able to view the data being modified by the current transaction. 
+ 	A trigger is a block of code that constitutes a set of T-SQL statements that are activated in response to certain actions.
+ 	The SQL Server supports following triggers:
+ 	DML triggers
+ 	DDL triggers
+ 	A trigger can be altered by using the ALTER TRIGGER statement.
+ 	A trigger can be deleted by using the DROP TRIGGER statement. 
+ 	Transactions are used to execute a sequence of statements together as a single logical unit of work.
+ 	Every transaction posses the ACID property.
+ 	The SQL Server supports following transactions:
+ 	Autocommit transaction
+ 	Explicit transaction
+ 	Locks are used to maintain transactional integrity.
+ 	In the absence of locking, following problems may occur if transactions use the same data from a database at the same time:
+ 	Lost updates
+ 	Uncommitted dependency 
+ 	Inconsistent analysis 
+ 	Phantom reads
+ 	The SQL Server supports following lock modes:
+ 	Shared locks
+ 	Exclusive locks
+ 	Update locks
+ 	Intent locks
+ 	Schema locks
+ 	Bulk Update locks
+ 	A deadlock is a situation in which two users (or transactions) have locks on separate objects, and each user wants to acquire a lock on the other user’s object.
+ 	Every transaction posses the ACID property.
+ 	The SQL Server supports following transactions:
+ 	Autocommit transaction
+ 	Explicit transaction
+ 	Locks are used to maintain transactional integrity.
+ 	In the absence of locking, following problems may occur if transactions use the same data from a database at the same time:
+ 	Lost updates
+ 	Uncommitted dependency 
+ 	Inconsistent analysis 
+ 	Phantom reads
+
+ 	A deadlock is a situation in which two users (or transactions) have locks on separate objects, and each user wants to acquire a lock on the other user’s object.
+
+
