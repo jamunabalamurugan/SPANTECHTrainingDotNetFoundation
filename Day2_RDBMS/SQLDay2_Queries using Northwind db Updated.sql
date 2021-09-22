@@ -493,17 +493,22 @@ HAVING AVG (unitprice) BETWEEN 500 AND 1000;
 --INNER JOIN sales.staffs m ON m.staff_id = e.manager_id ORDER
 --BY manager;
 
-
 --Joins:
 --? Self join:
 --? Find customers who locate in the same city.
---SELECT
---c1.city, c1.first_name + ' ' + c1.last_name customer_1,
---c2.first_name + ' ' + c2.last_name customer_2
---FROM sales.customers c1
---INNER JOIN sales.customers c2
---ON c1.customer_id > c2.customer_id AND c1.city = c2.city
---ORDER BY city, customer_1, customer_2;
+SELECT
+c1.city, c1.ContactName customer_1,
+c2.ContactName customer_2
+FROM customers c1
+INNER JOIN customers c2
+ON c1.customerid > c2.customerid AND c1.city = c2.city
+ORDER BY city, customer_1, customer_2;
+
+select worker.EmployeeID WorkerEmployeeId,worker.LastName WorkerName,
+manager.EmployeeID ManagerEmployeeId,manager.LastName ManagerName
+from employees worker join employees manager
+on worker.ReportsTo=manager.EmployeeID
+
 
 
 --Joins:
@@ -512,11 +517,11 @@ HAVING AVG (unitprice) BETWEEN 500 AND 1000;
 --the second table (T2). In other words, the cross join returns a Cartesian product
 --of rows from both tables.
 --? Return combinations of all products and stores:
---SELECT
---product_id, product_name, store_id, 0 AS quantity
---FROM production.products
---CROSS JOIN sales.stores
---ORDER 
+SELECT
+product_id, product_name, store_id, 0 AS quantity
+FROM production.products
+CROSS JOIN sales.stores
+ORDER 
 
 
 --Which product is returned in a join query have no join
@@ -528,12 +533,12 @@ HAVING AVG (unitprice) BETWEEN 500 AND 1000;
 
 --Subquery:
 --? A subquery is a query nested inside another statement:
---SELECT order_id, order_date, customer_id
---FROM sales.orders
---WHERE customer_id
---IN ( SELECT customer_id FROM sales.customers WHERE city =
---'New York')
---ORDER BY order_date DESC;
+SELECT orderid, orderdate, customerid
+FROM orders
+WHERE customerid
+IN ( SELECT customerid FROM customers WHERE city =
+'London')
+ORDER BY orderdate DESC;
 
 
 --Subquery:
@@ -550,13 +555,16 @@ HAVING AVG (unitprice) BETWEEN 500 AND 1000;
 
 
 --Subquery IN operator:
---SELECT
---product_id, product_name
---FROM production.products
---WHERE category_id
---IN
---( SELECT category_id FROM production.categories WHERE category_name =
---'Mountain Bikes' OR category_name = 'Road Bikes' );
+SELECT
+productid, productname
+FROM products
+WHERE categoryid
+IN
+( SELECT categoryid FROM categories WHERE categoryname =
+'Beverages' OR categoryname = 'Sea Food' );
+
+select * from products where UnitPrice>= all(
+select AVG(unitprice) from products group by CategoryID)
 
 --Subquery ANY operator:
 --SELECT
@@ -588,6 +596,15 @@ HAVING AVG (unitprice) BETWEEN 500 AND 1000;
 --= c.customer_id AND YEAR (order_date) = 2017 )
 --ORDER BY first_name, last_name;
 
+SELECT
+customerid, contactname, city
+FROM customers c
+WHERE
+not EXISTS
+( SELECT customerid FROM orders o WHERE o.customerid
+= c.customerid AND YEAR (orderdate) = 1997 )
+ORDER BY contactname;
+
 
 
 --Subquery EXISTS and NOT EXISTS operator:
@@ -603,10 +620,10 @@ HAVING AVG (unitprice) BETWEEN 500 AND 1000;
 
 --Which of the following statement(s) is TRUE regarding
 --subqueries?
---Inner queries cannot contain GROUP BY clause
---Outer query and inner query can get data from different tables
---Inner queries in WHERE clause can contain ORDER BY
---Outer query and inner query must get data from the same table
+--Inner queries cannot contain GROUP BY clause-False
+--Outer query and inner query can get data from different tables-True
+--Inner queries in WHERE clause can contain ORDER BY-False
+--Outer query and inner query must get data from the same table-False
 
 --Should be able to interpret the entities and relationships 
 --and create simple tables in database

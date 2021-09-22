@@ -206,18 +206,30 @@ exec proc_Return_Tax 'Algodata Infosystems' ,@getTax out
 print concat('The tax amount is ',@getTax)
 
 
-create proc proc_Get_Title_Name(@Tid varchar(1000) out)
+alter proc getname(@Tid varchar(1000) )
 as
 begin
-  set @Tid = (select title from titles where title_id=@Tid)
+  select title from titles where title_id=@Tid
+  end
+
+  -- select title_id from titles
+  getname 'PC1035'
+
+create proc getname1(@Tid varchar(1000),@tname varchar(1000) out)
+as
+begin
+  set @tname = (select title from titles where title_id=@Tid)
 end
 
 
 select * from titles
 declare @title varchar(1000)
-set @title = 'BU2075'
-exec proc_Get_Title_Name @title out
+--set @title = 'BU2075'
+exec getname1 'BU207', @title out
+if(@title is not null)
 print @title
+else
+print 'Invalid Title Id'
 
 create proc proc_Print_All_Title_details
 as
@@ -261,7 +273,7 @@ begin
 end
 --6871
 
-exec proc_Generate_Bill '6871'
+ proc_Generate_Bill '6871'
 
 create proc b(@bno varchar(100))
 as
@@ -324,6 +336,8 @@ begin tran
 	begin
 	    commit
 	end
+end 
+
 
 begin tran
    insert into tblTransaction values(2,1,1000,'credit')
@@ -360,6 +374,7 @@ begin
 end
 
 proc_Do_Transaction 1,3,1000
+select * from tblAccount
 
 select * from tblTransaction
 

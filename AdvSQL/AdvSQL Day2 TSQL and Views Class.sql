@@ -23,13 +23,17 @@ select top 1 customerid from orders
 group by customerid 
 order by count(orderid) desc)
 
-select CustomerId from Ordersgroup by CustomerIDhaving (count(orderid) =
+select CustomerId from Orders
+group by CustomerID
+having (count(orderid) =
 (select max(countId) from 
 (select count(o2.customerid) as [countId] 
 from Orders o2 group by o2.CustomerID) t))
 
 
-select CustomerId from Ordersgroup by CustomerIDhaving (count(orderid) =
+select CustomerId from Orders
+group by CustomerID
+having (count(orderid) =
 (select max(countId) from 
 (select count(customerid) as [countId] 
 from Orders group by CustomerID) mycust))
@@ -330,8 +334,8 @@ end
 
 begin
 declare @myname varchar(30)
-set @myname='Kanav'
-select * from tblstudent where name=@myname
+set @myname='Raj'
+select * from tblemployeeinfo where name=@myname
 end
 
 begin
@@ -362,7 +366,7 @@ end
 
 --Eg1
 select productid,unitsinstock,unitsonorder,'Product Status'=
-case when(discontinued=1) then 'This product is in Use'
+case when(discontinued=0) then 'This product is in Use'
 else '****This product is discontinued***' end
 from products
 
@@ -382,11 +386,12 @@ from products
 
 create proc stockstatus
 as begin
-select productname,UnitsinStock,case
+select productname,UnitsinStock,Stock_Status=case
 					when UnitsInStock<10 then 'Danger Level'
 					when UnitsInStock>30 then 'Over Stock Level'
 					else 'Correct Level'
-					end as Stock_Status
+					end 
+					--as Stock_Status
 from products
 end
 
@@ -402,7 +407,14 @@ alter table products add status varchar(50)
 
 --Update the status of the product based on totalsales
 
-UPDATE products SET status=CASE WHEN totalsales <= 30 THEN 'Slow moving Product'	 WHEN totalsales <= 60 THEN 'Medium moving Product'	 WHEN totalsales <= 100 THEN 'Fast moving Product'	 WHEN totalsales <= 500 THEN 'Fastest moving Product'ELSE 'Star Moving Product'END from Products
+UPDATE products SET status=
+CASE WHEN totalsales <= 30 THEN 'Slow moving Product'
+	 WHEN totalsales <= 60 THEN 'Medium moving Product'
+	 WHEN totalsales <= 100 THEN 'Fast moving Product'
+	 WHEN totalsales <= 500 THEN 'Fastest moving Product'
+ELSE 'Star Moving Product'
+END 
+from Products
 
 select * from products
 --Execute command is for building statements dynamically
@@ -420,6 +432,13 @@ select * from tblStudent
 
 select * from products
 
+create procedure displaycustomer
+as
+begin
+select customerid,contactname from customers
+
+end
+displaycustomer
 --Performance
 --Speed of Search and Results which is relevant
 
@@ -428,12 +447,22 @@ select * from products
 --Index
 --clustered           and          Non-clustered
 -- Index in dictionary             index at back side of book,atlas
---Eg: range 1050 to 2000           Eg:names starts with M
---only one clustered index		more than one column can have non clustered index
+--Eg: range 1050 to 1200           Eg:names starts with M
+--only one clustered index		   more than one column can have non clustered index
 --Primary Key clustered Index		Foreign Key Non Clustered Index
 
 /* create index indexname on tablename(Column1,Columnn)*/
 --Non-clustered
+create index indxEmpfname
+on employee(fname)
+sp_helpindex  employee
+select * from employee where pub_id <1000
+sp_help titles
+sp_helpdb dbhumanresource
+sp_helpindex titles
+sp_helptext getfullname
+
+select * from titles where title like 'B%'
 
 create index idxEmployeeName 
 on tblEmployeeInfo(Name)

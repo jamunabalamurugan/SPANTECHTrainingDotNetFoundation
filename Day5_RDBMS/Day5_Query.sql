@@ -17,7 +17,28 @@ as
 begin
    return (@amount*12.2/100)
 end
-select advance,dbo.fn_CalculateTax(advance) tax_amount from titles
+go
+--Calling a function inside a select statement
+select title,advance,dbo.fn_CalculateTax(advance) tax_amount
+from titles
+
+alter function GetFullName(@fname varchar(max),@lname varchar(max))
+returns varchar(MAX)
+as
+begin
+		return Upper(@fname)+' '+upper(@lname)
+end
+
+select HOST_ID(),reverse(HOST_NAME()),USER_NAME(),@@SERVERNAME,@@TRANCOUNT,day(getdate())
+
+declare @fullname varchar(max)
+select @fullname= dbo.GetFullName('Kavin','Kumar')
+print 'Your Full Name is '+@fullname
+
+select dbo.GetFullname(au_fname,au_lname) from authors 
+
+
+
 
 create function fn_Table_Example()
 returns @MyTable table(f1 int,f2 varchar(10))
@@ -25,6 +46,7 @@ as
 begin
    insert into @MyTable values(101,'ABC')
    insert into @MyTable values(102,'XYZ')
+
    return
 end
 
@@ -35,16 +57,32 @@ create table tblUserdetails
 password varchar(20),
 role varchar(20))
 
-create proc proc_Insert_TblUserDetails(@un varchar(20),@pass varchar(20), @rl varchar(20))
+alter proc proc_Insert_TblUserDetails(@un varchar(20),@pass varchar(20), @rl varchar(20))--, @rows int output
 as
 begin
+declare @count int
+   if(@pass is not null)
+   begin
    Insert into tblUserdetails values(@un,@pass,@rl)
+   if(@@TRANCOUNT=1)
+		set @count=@@trancount
+   else
+		set @count=0
+
+   end
+   print @count
+--   set @rows=@count
 end
 
-proc_Insert_TblUserDetails 'Kavin','1234','Admin'
-proc_Insert_TblUserDetails 'Kanav','1234','User'
-proc_Insert_TblUserDetails 'Sumedha','1111','User'
+declare @res int
+proc_Insert_TblUserDetails 'Kavin','1234','Admin',@res out
+select @res
 
+
+proc_Insert_TblUserDetails 'Kanav','1234','User'
+proc_Insert_TblUserDetails 'Sumedha',null,'User'
+
+insert tblUserdetails values('Sumedha',null,'User')
 select * from tblUserdetails
 
 alter proc proc_Login_Check(@un varchar(20),@pass varchar(20), @rl varchar(20) out)

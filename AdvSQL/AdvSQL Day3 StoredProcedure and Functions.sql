@@ -154,20 +154,24 @@ sp_helptext prcoutparameter
 
 ---With output parameter
 --Give the Total count of Employees for a given Department
-create procedure prcoutparameter2(@did int ,@result int output)
+create procedure prcoutparameter3(@did int ,@result int output,@maxhiredt datetime output)
 as
 begin
 set @result=(select count(depid) from tblEmployeeInfo
 where depid=@did
 group by depid)
+set @maxhiredt=(select max(hiredate) from tblemployeeinfo
+where depid=@did
+group by depid)
 end
 
-Declare @Dcount int 
-exec prcoutparameter2 ,@Dcount output
+Declare @Dcount int ,@hiredt datetime
+exec prcoutparameter3 2,@Dcount output,@hiredt output
 if(@Dcount>0)
 print 'Department has '+ ' '+cast(@Dcount as nvarchar(30))+' Employees'
 else
 print 'Sorry!!!Department has no employees '
+print @hiredt
 
 
 --Drop 
