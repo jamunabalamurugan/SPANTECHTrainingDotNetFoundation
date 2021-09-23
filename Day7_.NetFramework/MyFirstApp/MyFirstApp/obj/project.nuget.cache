@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "upekCtFFRHo/N9zkwCeL24AN9PfTxnIhr8/CnsKihKqZgxwksLBcib92RKG+xQvlkdLQ4C4Zfg3Wo8OBZy0u0w==",
+  "success": true,
+  "projectFilePath": "E:\\SPANTECH\\Training\\Day7_.NetFramework\\MyFirstApp\\MyFirstApp\\MyFirstApp.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\jamun\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\3.1.13\\microsoft.netcore.app.host.win-x64.3.1.13.nupkg.sha512"
+  ],
+  "logs": []
+}

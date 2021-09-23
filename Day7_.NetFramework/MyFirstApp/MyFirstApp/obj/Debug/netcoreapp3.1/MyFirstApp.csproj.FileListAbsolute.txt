@@ -1,0 +1,12 @@
+E:\SPANTECH\Training\Day7_.NetFramework\MyFirstApp\MyFirstApp\bin\Debug\netcoreapp3.1\MyFirstApp.exe
+E:\SPANTECH\Training\Day7_.NetFramework\MyFirstApp\MyFirstApp\bin\Debug\netcoreapp3.1\MyFirstApp.deps.json
+E:\SPANTECH\Training\Day7_.NetFramework\MyFirstApp\MyFirstApp\bin\Debug\netcoreapp3.1\MyFirstApp.runtimeconfig.json
+E:\SPANTECH\Training\Day7_.NetFramework\MyFirstApp\MyFirstApp\bin\Debug\netcoreapp3.1\MyFirstApp.runtimeconfig.dev.json
+E:\SPANTECH\Training\Day7_.NetFramework\MyFirstApp\MyFirstApp\bin\Debug\netcoreapp3.1\MyFirstApp.dll
+E:\SPANTECH\Training\Day7_.NetFramework\MyFirstApp\MyFirstApp\bin\Debug\netcoreapp3.1\MyFirstApp.pdb
+E:\SPANTECH\Training\Day7_.NetFramework\MyFirstApp\MyFirstApp\obj\Debug\netcoreapp3.1\MyFirstApp.AssemblyInfoInputs.cache
+E:\SPANTECH\Training\Day7_.NetFramework\MyFirstApp\MyFirstApp\obj\Debug\netcoreapp3.1\MyFirstApp.AssemblyInfo.cs
+E:\SPANTECH\Training\Day7_.NetFramework\MyFirstApp\MyFirstApp\obj\Debug\netcoreapp3.1\MyFirstApp.csproj.CoreCompileInputs.cache
+E:\SPANTECH\Training\Day7_.NetFramework\MyFirstApp\MyFirstApp\obj\Debug\netcoreapp3.1\MyFirstApp.dll
+E:\SPANTECH\Training\Day7_.NetFramework\MyFirstApp\MyFirstApp\obj\Debug\netcoreapp3.1\MyFirstApp.pdb
+E:\SPANTECH\Training\Day7_.NetFramework\MyFirstApp\MyFirstApp\obj\Debug\netcoreapp3.1\MyFirstApp.genruntimeconfig.cache
