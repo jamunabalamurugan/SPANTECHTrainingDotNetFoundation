@@ -1,0 +1,13 @@
+E:\AT\Day1\FirsstApplication\FirsstApplication\bin\Debug\FirsstApplication.exe.config
+E:\AT\Day1\FirsstApplication\FirsstApplication\bin\Debug\FirsstApplication.exe
+E:\AT\Day1\FirsstApplication\FirsstApplication\bin\Debug\FirsstApplication.pdb
+E:\AT\Day1\FirsstApplication\FirsstApplication\obj\Debug\FirstApplication.csprojAssemblyReference.cache
+E:\AT\Day1\FirsstApplication\FirsstApplication\obj\Debug\FirstApplication.csproj.CoreCompileInputs.cache
+E:\AT\Day1\FirsstApplication\FirsstApplication\obj\Debug\FirsstApplication.exe
+E:\AT\Day1\FirsstApplication\FirsstApplication\obj\Debug\FirsstApplication.pdb
+E:\AT2\Training\Day1 .NetFramewok\FirsstApplication\FirsstApplication\bin\Debug\FirsstApplication.exe.config
+E:\AT2\Training\Day1 .NetFramewok\FirsstApplication\FirsstApplication\bin\Debug\FirsstApplication.exe
+E:\AT2\Training\Day1 .NetFramewok\FirsstApplication\FirsstApplication\bin\Debug\FirsstApplication.pdb
+E:\AT2\Training\Day1 .NetFramewok\FirsstApplication\FirsstApplication\obj\Debug\FirstApplication.csproj.CoreCompileInputs.cache
+E:\AT2\Training\Day1 .NetFramewok\FirsstApplication\FirsstApplication\obj\Debug\FirsstApplication.exe
+E:\AT2\Training\Day1 .NetFramewok\FirsstApplication\FirsstApplication\obj\Debug\FirsstApplication.pdb

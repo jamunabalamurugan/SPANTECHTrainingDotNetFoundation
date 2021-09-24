@@ -1,0 +1,7 @@
+E:\SPANTECH\Training\Day8 CSharp PLT\Csharpbasics\Csharpbasics\bin\Debug\Csharpbasics.exe.config
+E:\SPANTECH\Training\Day8 CSharp PLT\Csharpbasics\Csharpbasics\bin\Debug\Csharpbasics.exe
+E:\SPANTECH\Training\Day8 CSharp PLT\Csharpbasics\Csharpbasics\bin\Debug\Csharpbasics.pdb
+E:\SPANTECH\Training\Day8 CSharp PLT\Csharpbasics\Csharpbasics\obj\Debug\Csharpbasics.csprojAssemblyReference.cache
+E:\SPANTECH\Training\Day8 CSharp PLT\Csharpbasics\Csharpbasics\obj\Debug\Csharpbasics.csproj.CoreCompileInputs.cache
+E:\SPANTECH\Training\Day8 CSharp PLT\Csharpbasics\Csharpbasics\obj\Debug\Csharpbasics.exe
+E:\SPANTECH\Training\Day8 CSharp PLT\Csharpbasics\Csharpbasics\obj\Debug\Csharpbasics.pdb
